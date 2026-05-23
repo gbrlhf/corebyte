@@ -1,0 +1,1307 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Corebyte</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23111110'/><text x='16' y='23' text-anchor='middle' font-family='Georgia,serif' font-size='22' font-style='italic' fill='white'>C</text></svg>"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=DM+Serif+Display:ital@0;1&amp;display=swap" rel="stylesheet" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #f7f6f3;
+        --white: #ffffff;
+        --ink: #111110;
+        --ink2: #2c2c2a;
+        --muted: #8a8880;
+        --border: #e5e3df;
+        --tag: #eceae6;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        overflow-x: hidden;
+      }
+
+      /* NAV */
+      nav {
+        position: fixed;
+        inset: 0 0 auto 0;
+        z-index: 200;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 60px;
+        background: rgba(247, 246, 243, 0.92);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--border);
+      }
+      .logo {
+        font-family: "DM Serif Display", serif;
+        font-size: 24px;
+        letter-spacing: 0.5px;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .logo:visited {
+        color: var(--ink);
+      }
+      .nav-btn {
+        font-size: 12px;
+        font-weight: 500;
+        background: var(--ink);
+        color: var(--white);
+        border: none;
+        padding: 10px 24px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .nav-btn:hover {
+        opacity: 0.8;
+      }
+
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        padding-top: 72px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        border-bottom: 1px solid var(--border);
+      }
+      .hero-bg-slider {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+      }
+      .bg-slide {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 10%;
+        opacity: 0;
+        transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .bg-slide.active {
+        opacity: 1;
+      }
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(to right, rgba(247, 246, 243, 1) 0%, rgba(247, 246, 243, 0.98) 35%, rgba(247, 246, 243, 0.7) 60%, rgba(247, 246, 243, 0.1) 100%);
+      }
+      .hero-l {
+        position: relative;
+        z-index: 2;
+        padding: 0 80px 140px 80px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 840px;
+      }
+      .hero-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--tag);
+        padding: 6px 14px;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--muted);
+        width: fit-content;
+        margin-bottom: 40px;
+        opacity: 0;
+        animation: up 0.7s 0.1s ease forwards;
+      }
+      .tag-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--ink);
+      }
+      h1 {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(64px, 8vw, 120px);
+        font-weight: 400;
+        line-height: 0.9;
+        letter-spacing: -3px;
+        margin-bottom: 32px;
+        opacity: 0;
+        animation: up 0.8s 0.2s ease forwards;
+      }
+      h1 em {
+        font-style: italic;
+        display: block;
+      }
+      .hero-desc {
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 1.8;
+        color: var(--muted);
+        max-width: 440px;
+        margin-bottom: 56px;
+        opacity: 0;
+        animation: up 0.8s 0.35s ease forwards;
+      }
+      .hero-acts {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        opacity: 0;
+        animation: up 0.8s 0.5s ease forwards;
+      }
+      .btn-dark {
+        font-size: 12px;
+        font-weight: 500;
+        background: var(--ink);
+        color: var(--white);
+        border: none;
+        padding: 16px 44px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .btn-dark:hover {
+        opacity: 0.8;
+      }
+      .btn-line {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--muted);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 2px;
+        transition:
+          color 0.2s,
+          border-color 0.2s;
+      }
+      .btn-line:hover {
+        color: var(--ink);
+        border-color: var(--ink);
+      }
+      .hero-r-stats {
+        position: relative;
+        z-index: 2;
+        border-top: 1px solid var(--border);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        opacity: 0;
+        animation: up 0.8s 0.7s ease forwards;
+      }
+      .h-stat {
+        padding: 32px 80px;
+        border-right: 1px solid var(--border);
+      }
+      .h-stat:last-child {
+        border-right: none;
+      }
+      .h-stat-n {
+        font-family: "DM Serif Display", serif;
+        font-size: 36px;
+        font-weight: 400;
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+      .h-stat-l {
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      /* TICKER */
+      .ticker {
+        overflow: hidden;
+        padding: 18px 0;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+      }
+      .tk-track {
+        display: inline-flex;
+        animation: ticker 35s linear infinite;
+      }
+      .tk-item {
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--muted);
+        padding: 0 48px;
+        white-space: nowrap;
+        letter-spacing: 0.5px;
+      }
+      .tk-dot {
+        color: var(--border);
+        align-self: center;
+      }
+
+      /* PRODUCTS */
+      .products {
+        padding: 120px 80px;
+      }
+      .sec-top {
+        margin-bottom: 64px;
+      }
+      .sec-label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 12px;
+      }
+      h2 {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(40px, 5vw, 72px);
+        font-weight: 400;
+        line-height: 0.95;
+        letter-spacing: -1px;
+      }
+      h2 em {
+        font-style: italic;
+      }
+
+      .pgrid-lp {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border: 1px solid var(--border);
+      }
+      .pc {
+        border-right: 1px solid var(--border);
+        background: var(--white);
+        display: flex;
+        flex-direction: column;
+        transition: background 0.25s;
+      }
+      .pc:last-child {
+        border-right: none;
+      }
+      .pc:hover {
+        background: var(--bg);
+      }
+      .pc-img {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 280px;
+        background: var(--white);
+      }
+      .pc-img-inner {
+        transition: transform 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+        position: relative;
+        z-index: 2;
+        width: 85%;
+        height: 85%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .pc-img-inner img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+      }
+      .pc:hover .pc-img-inner {
+        transform: translateY(-10px) scale(1.02);
+      }
+      .pc-tag {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 10px;
+        font-weight: 600;
+        padding: 5px 12px;
+        background: var(--white);
+        border: 1px solid var(--border);
+        color: var(--ink);
+        z-index: 3;
+        letter-spacing: 0.5px;
+      }
+      .pc-tag.dark {
+        background: var(--ink);
+        color: var(--white);
+        border-color: var(--ink);
+      }
+      .pc-body {
+        padding: 24px 32px 32px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .pc-cat {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+      .pc-name {
+        font-family: "DM Serif Display", serif;
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 1.1;
+        margin-bottom: 8px;
+      }
+      .pc-spec {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 300;
+        line-height: 1.7;
+        flex: 1;
+        margin-bottom: 20px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .pc-stars {
+        font-size: 12px;
+        color: var(--ink);
+        margin-bottom: 20px;
+      }
+      .pc-stars span {
+        color: var(--muted);
+        margin-left: 6px;
+        font-size: 11px;
+      }
+      .pc-foot {
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+      }
+      .pc-price {
+        font-family: "DM Serif Display", serif;
+        font-size: 24px;
+        font-weight: 400;
+      }
+      .pc-old {
+        font-size: 12px;
+        color: var(--muted);
+        text-decoration: line-through;
+        margin-left: 8px;
+      }
+
+      /* BRANDS */
+      .brands {
+        padding: 64px 80px;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        background: var(--white);
+      }
+      .brands-l {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--muted);
+        text-align: center;
+        margin-bottom: 48px;
+      }
+      .brands-scroll {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 32px;
+      }
+      .br-name {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(16px, 2vw, 24px);
+        font-weight: 400;
+        letter-spacing: 1px;
+        color: var(--border);
+        transition:
+          color 0.3s,
+          transform 0.3s;
+      }
+      .br-name:hover {
+        color: var(--muted);
+        transform: translateY(-2px);
+      }
+
+      /* SPLIT */
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        min-height: 600px;
+      }
+      .split-l {
+        padding: 100px 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-right: 1px solid var(--border);
+        background: var(--white);
+      }
+      .split-l h2 {
+        font-size: clamp(40px, 4.5vw, 64px);
+        margin: 12px 0 24px;
+      }
+      .split-l p {
+        font-size: 15px;
+        font-weight: 300;
+        color: var(--muted);
+        line-height: 2;
+        max-width: 400px;
+      }
+      .split-r {
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+      }
+      .feat {
+        padding: 60px 80px;
+        border-bottom: 1px solid var(--border);
+        background: var(--white);
+        display: flex;
+        gap: 32px;
+        align-items: flex-start;
+        transition: background 0.25s;
+      }
+      .feat:last-child {
+        border-bottom: none;
+      }
+      .feat:hover {
+        background: var(--bg);
+      }
+      .feat-num {
+        font-family: "DM Serif Display", serif;
+        font-size: 48px;
+        font-weight: 400;
+        color: var(--border);
+        line-height: 1;
+        flex-shrink: 0;
+      }
+      .feat-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      .feat-desc {
+        font-size: 14px;
+        font-weight: 300;
+        color: var(--muted);
+        line-height: 1.9;
+      }
+
+      /* TESTIMONIALS */
+      .testimonials {
+        padding: 120px 80px;
+        background: var(--bg);
+      }
+      .tgrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        margin-top: 64px;
+      }
+      .tcard {
+        background: var(--white);
+        padding: 56px 48px;
+        transition: background 0.25s;
+      }
+      .tcard:hover {
+        background: var(--bg);
+      }
+      .tq {
+        font-family: "DM Serif Display", serif;
+        font-size: 64px;
+        font-weight: 400;
+        color: var(--border);
+        line-height: 1;
+        margin-bottom: -12px;
+      }
+      .tt {
+        font-family: "DM Serif Display", serif;
+        font-size: 20px;
+        font-weight: 400;
+        font-style: italic;
+        line-height: 1.7;
+        color: var(--ink2);
+        margin-bottom: 32px;
+      }
+      .ta-rule {
+        width: 32px;
+        height: 1px;
+        background: var(--border);
+        margin-bottom: 20px;
+      }
+      .ta-name {
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .ta-role {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+        letter-spacing: 0.5px;
+      }
+      .ta-stars {
+        font-size: 12px;
+        color: var(--ink);
+        margin-top: 12px;
+      }
+
+      /* TRUST BAR */
+      .trust-bar {
+        background: var(--white);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        padding: 20px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        flex-wrap: wrap;
+      }
+      .trust-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 32px;
+        border-right: 1px solid var(--border);
+      }
+      .trust-item:last-child {
+        border-right: none;
+      }
+      .trust-icon {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        color: var(--muted);
+      }
+      .trust-text {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+      .trust-text small {
+        display: block;
+        font-size: 10px;
+        font-weight: 300;
+        color: var(--muted);
+      }
+
+      /* CTA */
+      .cta {
+        padding: 140px 80px;
+        text-align: center;
+        background: var(--ink);
+        color: var(--white);
+        position: relative;
+        overflow: hidden;
+      }
+      .cta::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+        pointer-events: none;
+      }
+      .cta .sec-label {
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .cta h2 {
+        color: var(--white);
+        font-size: clamp(52px, 6.5vw, 92px);
+        margin: 16px 0 24px;
+      }
+      .cta h2 em {
+        color: rgba(255, 255, 255, 0.45);
+      }
+      .cta p {
+        font-size: 16px;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.5);
+        max-width: 500px;
+        margin: 0 auto 56px;
+        line-height: 1.9;
+      }
+      .btn-white {
+        font-size: 13px;
+        font-weight: 500;
+        background: var(--white);
+        color: var(--ink);
+        border: none;
+        padding: 18px 56px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .btn-white:hover {
+        opacity: 0.88;
+      }
+
+      /* NEWSLETTER */
+      .nl {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .nl-l {
+        padding: 100px 100px;
+        border-right: 1px solid var(--border);
+        background: var(--white);
+      }
+      .nl-l h2 {
+        font-size: clamp(32px, 3.5vw, 52px);
+        margin: 12px 0 16px;
+      }
+      .nl-l p {
+        font-size: 14px;
+        font-weight: 300;
+        color: var(--muted);
+        line-height: 2;
+      }
+      .nl-r {
+        padding: 100px 100px;
+        background: var(--white);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+      }
+      .nl-in {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--ink);
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        font-weight: 300;
+        padding: 16px 20px;
+        outline: none;
+        transition: border-color 0.2s;
+        width: 100%;
+      }
+      .nl-in::placeholder {
+        color: var(--muted);
+      }
+      .nl-in:focus {
+        border-color: var(--ink);
+      }
+      .nl-sub {
+        font-size: 13px;
+        font-weight: 600;
+        background: var(--ink);
+        color: var(--white);
+        border: none;
+        padding: 16px 40px;
+        cursor: pointer;
+        align-self: flex-start;
+        transition: opacity 0.2s;
+      }
+      .nl-sub:hover {
+        opacity: 0.8;
+      }
+      .nl-note {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      /* FOOTER */
+      footer {
+        background: var(--white);
+        border-top: 1px solid var(--border);
+        padding: 28px 80px;
+        text-align: center;
+      }
+      .f-copy {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .wa-float {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        z-index: 999;
+        width: 52px;
+        height: 52px;
+        background: #25d366;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .wa-float:hover {
+        transform: scale(1.08);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.24);
+      }
+
+      /* ANIMATIONS */
+      @keyframes up {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes ticker {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      .rv {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.8s cubic-bezier(0.2, 1, 0.3, 1),
+          transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+      }
+      .rv.v {
+        opacity: 1;
+        transform: none;
+      }
+      .d1 {
+        transition-delay: 0.15s;
+      }
+      .d2 {
+        transition-delay: 0.3s;
+      }
+      .d3 {
+        transition-delay: 0.45s;
+      }
+
+      /* TABLET */
+      @media (max-width: 900px) {
+        nav {
+          padding: 0 24px;
+        }
+        .hero-l {
+          padding: 60px 24px 80px;
+        }
+        h1 {
+          letter-spacing: -2px;
+        }
+        .hero-r-stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .h-stat {
+          padding: 24px 32px;
+        }
+        .h-stat:nth-child(2) {
+          border-right: none;
+        }
+        .h-stat:nth-child(n + 3) {
+          border-top: 1px solid var(--border);
+        }
+        .products {
+          padding: 80px 40px;
+        }
+        .pgrid-lp {
+          grid-template-columns: 1fr;
+        }
+        .pc {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .pc:last-child {
+          border-bottom: none;
+        }
+        .brands {
+          padding: 48px 40px;
+        }
+        .brands-scroll {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 12px 28px;
+        }
+        .split {
+          grid-template-columns: 1fr;
+        }
+        .split-l {
+          padding: 60px 40px;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .feat {
+          padding: 48px 40px;
+        }
+        .testimonials {
+          padding: 80px 40px;
+        }
+        .tgrid {
+          grid-template-columns: 1fr;
+        }
+        .tcard {
+          padding: 40px 32px;
+        }
+        .trust-bar {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          padding: 0;
+        }
+        .trust-item {
+          border-right: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
+          padding: 16px 20px;
+        }
+        .trust-item:nth-child(even) {
+          border-right: none;
+        }
+        .trust-item:nth-child(3),
+        .trust-item:nth-child(4) {
+          border-bottom: none;
+        }
+        .cta {
+          padding: 80px 40px;
+        }
+        .nl {
+          grid-template-columns: 1fr;
+        }
+        .nl-l {
+          padding: 60px 40px;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .nl-r {
+          padding: 60px 40px;
+        }
+        footer {
+          padding: 24px 40px;
+        }
+      }
+
+      /* MOBILE */
+      @media (max-width: 600px) {
+        nav {
+          padding: 0 20px;
+          height: 60px;
+        }
+        .hero {
+          padding-top: 60px;
+        }
+        .hero-overlay {
+          background: rgba(247, 246, 243, 0.96);
+        }
+        .hero-l {
+          padding: 40px 20px 56px;
+        }
+        h1 {
+          letter-spacing: -1px;
+          margin-bottom: 20px;
+        }
+        .hero-desc {
+          font-size: 15px;
+          margin-bottom: 32px;
+          max-width: 100%;
+        }
+        .hero-acts {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+        .h-stat {
+          padding: 20px;
+        }
+        .h-stat-n {
+          font-size: 28px;
+        }
+        .products {
+          padding: 56px 20px;
+        }
+        .pc-body {
+          padding: 20px 20px 24px;
+        }
+        .pc-name {
+          font-size: 20px;
+        }
+        .pc-price {
+          font-size: 20px;
+        }
+        .brands {
+          padding: 40px 20px;
+        }
+        .br-name {
+          font-size: 14px;
+        }
+        .split-l {
+          padding: 48px 20px;
+        }
+        .feat {
+          padding: 32px 20px;
+        }
+        .feat-num {
+          font-size: 36px;
+        }
+        .testimonials {
+          padding: 56px 20px;
+        }
+        .tgrid {
+          margin-top: 40px;
+        }
+        .tcard {
+          padding: 28px 20px;
+        }
+        .tq {
+          font-size: 48px;
+        }
+        .tt {
+          font-size: 17px;
+        }
+        .trust-item {
+          padding: 14px 16px;
+        }
+        .trust-icon {
+          width: 22px;
+          height: 22px;
+        }
+        .cta {
+          padding: 60px 20px;
+        }
+        .nl-l {
+          padding: 48px 20px;
+        }
+        .nl-r {
+          padding: 48px 20px;
+        }
+        .nl-sub {
+          width: 100%;
+          text-align: center;
+        }
+        footer {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <a class="logo" href="#">Corebyte</a>
+      <button class="nav-btn">Shop Now</button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="hero-bg-slider">
+        <div class="bg-slide active">
+          <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 75% 50%, #dbeafe 0%, transparent 70%)"></div>
+          <img alt="Gaming Mouse" src="img/mouse.png" style="position: relative; z-index: 1; max-width: 580px; height: auto; object-fit: contain" />
+        </div>
+        <div class="bg-slide">
+          <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 70% 80% at 75% 50%, #fce7f3 0%, transparent 70%)"></div>
+          <img alt="Mechanical Keyboard" src="img/keyboard.png" style="position: relative; z-index: 1; max-width: 640px; height: auto; object-fit: contain" />
+        </div>
+        <div class="bg-slide">
+          <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 75% 50%, #d1fae5 0%, transparent 70%)"></div>
+          <img alt="In-Ear Monitor" src="img/iem.png" style="position: relative; z-index: 1; max-width: 580px; height: auto; object-fit: contain" />
+        </div>
+        <div class="bg-slide">
+          <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 75% 50%, #fef9c3 0%, transparent 70%)"></div>
+          <img alt="Gaming Headset" src="img/headset.png" style="position: relative; z-index: 1; max-width: 580px; height: auto; object-fit: contain" />
+        </div>
+        <div class="bg-slide">
+          <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 65% 80% at 75% 50%, #ede9fe 0%, transparent 70%)"></div>
+          <img alt="DAC Amplifier" src="img/DAC.png" style="position: relative; z-index: 1; max-width: 620px; height: auto; object-fit: contain" />
+        </div>
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-l">
+        <div class="hero-tag"><span class="tag-dot"></span> New Arrivals 2026</div>
+        <h1>The right<br /><em>Gear, simply.</em></h1>
+        <p class="hero-desc">Peripheral gaming dan audio pilihan, dikurasi tanpa kerumitan, hanya yang benar-benar layak masuk setup kamu.</p>
+        <div class="hero-acts">
+          <button class="btn-dark">Shop Now</button>
+          <a class="btn-line" href="#products">View Collection</a>
+        </div>
+      </div>
+      <div class="hero-r-stats">
+        <div class="h-stat">
+          <div class="h-stat-n">200+</div>
+          <div class="h-stat-l">Products</div>
+        </div>
+        <div class="h-stat">
+          <div class="h-stat-n">40K</div>
+          <div class="h-stat-l">Customers</div>
+        </div>
+        <div class="h-stat">
+          <div class="h-stat-n">50+</div>
+          <div class="h-stat-l">Brands</div>
+        </div>
+        <div class="h-stat">
+          <div class="h-stat-n">4.9</div>
+          <div class="h-stat-l">Rating</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TICKER -->
+    <div class="ticker">
+      <div class="tk-track">
+        <span class="tk-item">Gaming Mouse</span><span class="tk-dot">·</span> <span class="tk-item">Mechanical Keyboard</span><span class="tk-dot">·</span> <span class="tk-item">In-Ear Monitor</span><span class="tk-dot">·</span>
+        <span class="tk-item">Headset</span><span class="tk-dot">·</span> <span class="tk-item">DAC & amp; Amplifier</span><span class="tk-dot">·</span> <span class="tk-item">Mousepad</span><span class="tk-dot">·</span>
+        <span class="tk-item">Webcam</span><span class="tk-dot">·</span> <span class="tk-item">Gaming Mouse</span><span class="tk-dot">·</span> <span class="tk-item">Mechanical Keyboard</span><span class="tk-dot">·</span>
+        <span class="tk-item">In-Ear Monitor</span><span class="tk-dot">·</span> <span class="tk-item">Headset</span><span class="tk-dot">·</span> <span class="tk-item">DAC & amp; Amplifier</span><span class="tk-dot">·</span>
+        <span class="tk-item">Mousepad</span><span class="tk-dot">·</span> <span class="tk-item">Webcam</span><span class="tk-dot">·</span>
+      </div>
+    </div>
+
+    <!-- FEATURED PRODUCTS -->
+    <section class="products" id="products">
+      <div class="sec-top rv">
+        <div class="sec-label">Featured</div>
+        <h2>Top Picks <em>2026</em></h2>
+      </div>
+      <div class="pgrid-lp">
+        <!-- Mouse -->
+        <div class="pc rv">
+          <div class="pc-img" style="background: var(--bg)">
+            <div style="position: absolute; top: 20px; left: 20px; display: flex; gap: 8px; z-index: 3">
+              <div class="pc-tag dark" style="position: static">Bestseller</div>
+              <div class="pc-tag" style="position: static; background: #fef3c7; border-color: #fde68a; color: #92400e">−22%</div>
+            </div>
+            <div class="pc-img-inner">
+              <img alt="VoidX Pro Wireless" src="img/mouse.png" />
+            </div>
+          </div>
+          <div class="pc-body">
+            <div class="pc-cat">Gaming Mouse · Wireless</div>
+            <div class="pc-name">VoidX Pro Wireless</div>
+            <div class="pc-spec">PAW3950 · 30K DPI · 95h battery · 58g · 2.4GHz · 4000Hz polling</div>
+            <div class="pc-stars">★★★★★ <span>631 ulasan</span></div>
+            <div class="pc-foot"><span class="pc-price">Rp 1.249.000</span><span class="pc-old">Rp 1.599.000</span></div>
+          </div>
+        </div>
+        <!-- Keyboard -->
+        <div class="pc rv d1">
+          <div class="pc-img" style="background: var(--bg)">
+            <div class="pc-tag">New</div>
+            <div class="pc-img-inner">
+              <img alt="Apex TKL" src="img/keyboard.png" />
+            </div>
+          </div>
+          <div class="pc-body">
+            <div class="pc-cat">Mechanical Keyboard</div>
+            <div class="pc-name">Apex TKL</div>
+            <div class="pc-spec">Gateron G Pro · Hot-swap · PBT · Per-key RGB</div>
+            <div class="pc-stars">★★★★★ <span>183 ulasan</span></div>
+            <div class="pc-foot">
+              <span class="pc-price">Rp 899.000</span>
+            </div>
+          </div>
+        </div>
+        <!-- IEM -->
+        <div class="pc rv d2">
+          <div class="pc-img" style="background: var(--bg)">
+            <div class="pc-tag dark">Premium</div>
+            <div class="pc-img-inner">
+              <img alt="Sonix S7 Tribrid" src="img/iem.png" />
+            </div>
+          </div>
+          <div class="pc-body">
+            <div class="pc-cat">In-Ear Monitor</div>
+            <div class="pc-name">Sonix S7 Tribrid</div>
+            <div class="pc-spec">1DD + 2BA + 1 Planar · Detachable · 10Hz–40kHz</div>
+            <div class="pc-stars">★★★★★ <span>97 ulasan</span></div>
+            <div class="pc-foot">
+              <span class="pc-price">Rp 2.199.000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BRANDS -->
+    <section class="brands" id="brands">
+      <div class="brands-l">Our Partners</div>
+      <div class="brands-scroll">
+        <div class="br-name">Logitech</div>
+        <div class="br-name">Razer</div>
+        <div class="br-name">Topping</div>
+        <div class="br-name">HyperX</div>
+        <div class="br-name">ASUS ROG</div>
+        <div class="br-name">Fifine</div>
+        <div class="br-name">SteelSeries</div>
+        <div class="br-name">Corsair</div>
+        <div class="br-name">Audio-Technica</div>
+        <div class="br-name">Sennheiser</div>
+      </div>
+    </section>
+
+    <!-- WHY COREBYTE -->
+    <section class="split" id="about">
+      <div class="split-l rv">
+        <div class="sec-label">Why Corebyte</div>
+        <h2>Fewer products,<br /><em>Higher standards.</em></h2>
+        <p>Karena setup yang bagus bukan soal banyak pilihan, tapi soal memilih yang tepat.</p>
+      </div>
+      <div class="split-r">
+        <div class="feat rv">
+          <div class="feat-num">01</div>
+          <div>
+            <div class="feat-title">Garansi Resmi</div>
+            <div class="feat-desc">Semua produk bergaransi resmi distributor. Klaim mudah, tanpa prosedur yang mempersulit.</div>
+          </div>
+        </div>
+        <div class="feat rv d1">
+          <div class="feat-num">02</div>
+          <div>
+            <div class="feat-title">Same-Day Delivery</div>
+            <div class="feat-desc">Order sebelum jam 12 siang, tiba hari ini. Area Jabodetabek dengan layanan kurir terpercaya.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+      <div class="rv">
+        <div class="sec-label">Voices</div>
+        <h2>What they say.</h2>
+      </div>
+      <div class="tgrid">
+        <div class="tcard rv">
+          <div class="tq">"</div>
+          <div class="tt">Mouse VoidX Pro adalah yang terbaik yang pernah saya pegang. Presisi, ringan, dan terasa premium di genggaman.</div>
+          <div class="ta-rule"></div>
+          <div class="ta-name">Arya Ramadhan</div>
+          <div class="ta-role">Valorant Radiant · Jakarta</div>
+          <div class="ta-stars">★★★★★</div>
+        </div>
+        <div class="tcard rv d1">
+          <div class="tq">"</div>
+          <div class="tt">IEM Sonix S7 mengubah cara saya menikmati musik. Detail yang sebelumnya tak pernah terdengar, kini hadir.</div>
+          <div class="ta-rule"></div>
+          <div class="ta-name">Dina Safitri</div>
+          <div class="ta-role">Audio Enthusiast · Bandung</div>
+          <div class="ta-stars">★★★★★</div>
+        </div>
+        <div class="tcard rv d2">
+          <div class="tq">"</div>
+          <div class="tt">Tiga kali belanja, tiga kali puas. Packaging rapi, barang original, dan respons CS sangat cepat.</div>
+          <div class="ta-rule"></div>
+          <div class="ta-name">Bagus Kurniawan</div>
+          <div class="ta-role">Software Engineer · Surabaya</div>
+          <div class="ta-stars">★★★★★</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST BAR -->
+    <section class="trust-bar rv">
+      <div class="trust-item">
+        <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="M9 12l2 2 4-4" />
+        </svg>
+        <div class="trust-text">Pembayaran Aman<small>Visa · Mastercard · GoPay · QRIS</small></div>
+      </div>
+      <div class="trust-item">
+        <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+        <div class="trust-text">Same-Day Delivery<small>Jabodetabek · Estimasi 2–5 jam</small></div>
+      </div>
+      <div class="trust-item">
+        <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <polyline points="23 4 23 10 17 10" />
+          <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" />
+        </svg>
+        <div class="trust-text">Garansi Retur<small>30 hari tanpa pertanyaan</small></div>
+      </div>
+      <div class="trust-item">
+        <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <div class="trust-text">Data Terlindungi<small>Kebijakan Privasi · GDPR Compliant</small></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div style="position: relative">
+        <div class="sec-label rv">Flash Sale</div>
+        <h2 class="rv">Up to 40% off.<br /><em>Today only.</em></h2>
+        <p class="rv">Penawaran berakhir tengah malam. Lengkapi setup impianmu sekarang dengan harga terbaik tahun ini.</p>
+        <button class="btn-white rv">Shop the Sale</button>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="nl" id="contact">
+      <div class="nl-l rv">
+        <div class="sec-label">Stay in the loop</div>
+        <h2>Early access.<br /><em>Better gear. Less noise.</em></h2>
+        <p style="margin-top: 12px">Jadi yang pertama tahu soal produk terbaru, restock, dan penawaran eksklusif dari Corebyte.</p>
+      </div>
+      <div class="nl-r rv d1">
+        <input class="nl-in" placeholder="Your name" type="text" />
+        <input class="nl-in" placeholder="Email address" type="email" />
+        <button class="nl-sub">Subscribe</button>
+        <span class="nl-note">Unsubscribe anytime. We respect your privacy.</span>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <span class="f-copy">© 2026 Corebyte · Peripheral gaming &amp; audio, dikurasi tanpa kerumitan.</span>
+    </footer>
+
+    <a class="wa-float" href="https://wa.me/6285156366541" target="_blank" rel="noopener" aria-label="Chat via WhatsApp">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+        <path
+          d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"
+        />
+      </svg>
+    </a>
+
+    <script>
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((x) => {
+            if (x.isIntersecting) {
+              x.target.classList.add("v");
+              obs.unobserve(x.target);
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+      document.querySelectorAll(".rv").forEach((el) => obs.observe(el));
+
+      let cur = 0;
+      const slides = document.querySelectorAll(".bg-slide");
+      function goTo(i) {
+        slides[cur].classList.remove("active");
+        cur = i;
+        slides[cur].classList.add("active");
+      }
+      setInterval(() => goTo((cur + 1) % slides.length), 4500);
+    </script>
+  </body>
+</html>
