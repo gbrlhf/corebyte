@@ -821,14 +821,26 @@
           padding: 80px 40px;
         }
         .pgrid-lp {
-          grid-template-columns: 1fr;
+          display: flex;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          border: none;
+          gap: 16px;
+          margin: 0 -40px;
+          padding: 0 40px;
+        }
+        .pgrid-lp::-webkit-scrollbar {
+          display: none;
         }
         .pc {
-          border-right: none;
-          border-bottom: 1px solid var(--border);
+          flex: 0 0 80%;
+          border: 1px solid var(--border);
+          scroll-snap-align: start;
         }
         .pc:last-child {
-          border-bottom: none;
+          margin-right: 40px;
         }
         .brands {
           padding: 48px 40px;
@@ -931,6 +943,13 @@
         }
         .products {
           padding: 56px 20px;
+        }
+        .pgrid-lp {
+          margin: 0 -20px;
+          padding: 0 20px;
+        }
+        .pc:last-child {
+          margin-right: 20px;
         }
         .pc-body {
           padding: 20px 20px 24px;
